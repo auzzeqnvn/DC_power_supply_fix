@@ -1,0 +1,34 @@
+RAM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+
+EEPROM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+
+Register Allocation
+Variable                                                                          Register  Size
+------------------------------------------------------------------------------------------------
+Uc_Negative_5_over_count                                                          R3           1
+Uc_Negative_5_under_count                                                         R2           1
+Uc_Positive_5_over_count                                                          R5           1
+Uc_Positive_5_under_count                                                         R4           1
+Uc_Positive_12_over_count                                                         R7           1
+Uc_Positive_12_under_count                                                        R6           1
+Uc_Negative_12_over_count                                                         R9           1
+Uc_Negative_12_under_count                                                        R8           1
+Uc_Positive_24_over_count                                                         R11          1
+Uc_Positive_24_under_count                                                        R10          1
+Uc_Negative_5_warning                                                             GPIOR0.0  1bit
+Uc_Positive_5_warning                                                             GPIOR0.1  1bit
+Uc_Positive_12_warning                                                            GPIOR0.2  1bit
+Uc_Negative_12_warning                                                            GPIOR0.3  1bit
+Uc_Positive_24_warning                                                            GPIOR0.4  1bit
+
+FLASH Allocation [words]
+Function                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+read_adc                                                                          0x00027     15
+Init                                                                              0x00036     23
+Protect                                                                           0x0004D    123
+main                                                                              0x000C8     46
