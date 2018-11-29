@@ -1174,34 +1174,17 @@ __CLEAR_SRAM:
 ; 0000 005C {
 
 	.CSEG
-_read_adc:
-; .FSTART _read_adc
 ; 0000 005D ADMUX=(adc_input & 0x3f) | ADC_VREF_TYPE;
-	ST   -Y,R26
 ;	adc_input -> Y+0
-	LD   R30,Y
-	ANDI R30,LOW(0x3F)
-	OUT  0x7,R30
 ; 0000 005E // Delay needed for the stabilization of the ADC input voltage
 ; 0000 005F delay_us(10);
-	__DELAY_USB 27
 ; 0000 0060 // Start the AD conversion
 ; 0000 0061 ADCSRA|=(1<<ADSC);
-	SBI  0x6,6
 ; 0000 0062 // Wait for the AD conversion to complete
 ; 0000 0063 while ((ADCSRA & (1<<ADIF))==0);
-_0x3:
-	SBIS 0x6,4
-	RJMP _0x3
 ; 0000 0064 ADCSRA|=(1<<ADIF);
-	SBI  0x6,4
 ; 0000 0065 return ADCW;
-	IN   R30,0x4
-	IN   R31,0x4+1
-	ADIW R28,1
-	RET
 ; 0000 0066 }
-; .FEND
 ;
 ;void    Init(void)
 ; 0000 0069 {
@@ -1258,304 +1241,153 @@ _Init:
 ;
 ;void    Protect(void)
 ; 0000 0084 {
-_Protect:
-; .FSTART _Protect
 ; 0000 0085     unsigned int    Uint_adc_value;
 ; 0000 0086 
 ; 0000 0087     /* Kiem tra nguon -5vdc */
 ; 0000 0088     Uint_adc_value = read_adc(ADC_Negative_5);
-	RCALL __SAVELOCR2
 ;	Uint_adc_value -> R16,R17
-	LDI  R26,LOW(1)
-	RCALL SUBOPT_0x0
 ; 0000 0089     if(Uint_adc_value*ADC_Negative_5_ratio > ADC_Negative_5_Set_OVER)
-	BRLO _0x18
 ; 0000 008A     {
 ; 0000 008B         Uc_Negative_5_over_count++;
-	INC  R3
 ; 0000 008C         if(Uc_Negative_5_over_count > 10)
-	LDI  R30,LOW(10)
-	CP   R30,R3
-	BRSH _0x19
 ; 0000 008D         {
 ; 0000 008E             Uc_Negative_5_over_count = 11;
-	LDI  R30,LOW(11)
-	MOV  R3,R30
 ; 0000 008F             Uc_Negative_5_under_count = 0;
-	CLR  R2
 ; 0000 0090             /* Set warning */
 ; 0000 0091             Uc_Negative_5_warning = 1;
-	SBI  0x13,0
 ; 0000 0092         }
 ; 0000 0093     }
-_0x19:
 ; 0000 0094     else
-	RJMP _0x1C
-_0x18:
 ; 0000 0095     {
 ; 0000 0096         Uc_Negative_5_under_count++;
-	INC  R2
 ; 0000 0097         if(Uc_Negative_5_under_count > 10)
-	LDI  R30,LOW(10)
-	CP   R30,R2
-	BRSH _0x1D
 ; 0000 0098         {
 ; 0000 0099             Uc_Negative_5_over_count = 0;
-	CLR  R3
 ; 0000 009A             Uc_Negative_5_under_count = 11;
-	LDI  R30,LOW(11)
-	MOV  R2,R30
 ; 0000 009B             /* clear warning */
 ; 0000 009C             Uc_Negative_5_warning = 0;
-	CBI  0x13,0
 ; 0000 009D         }
 ; 0000 009E     }
-_0x1D:
-_0x1C:
 ; 0000 009F 
 ; 0000 00A0     /* Kiem tra nguon +5VDC */
 ; 0000 00A1     Uint_adc_value = read_adc(ADC_Positive_5);
-	LDI  R26,LOW(5)
-	RCALL SUBOPT_0x0
 ; 0000 00A2     if(Uint_adc_value*ADC_Positive_5_ratio > ADC_Positive_5_Set_OVER)
-	BRLO _0x20
 ; 0000 00A3     {
 ; 0000 00A4         Uc_Positive_5_over_count++;
-	INC  R5
 ; 0000 00A5         if(Uc_Positive_5_over_count > 10)
-	LDI  R30,LOW(10)
-	CP   R30,R5
-	BRSH _0x21
 ; 0000 00A6         {
 ; 0000 00A7             Uc_Positive_5_over_count = 11;
-	LDI  R30,LOW(11)
-	MOV  R5,R30
 ; 0000 00A8             Uc_Positive_5_under_count = 0;
-	CLR  R4
 ; 0000 00A9             /* Set warning */
 ; 0000 00AA             Uc_Positive_5_warning = 1;
-	SBI  0x13,1
 ; 0000 00AB         }
 ; 0000 00AC     }
-_0x21:
 ; 0000 00AD     else
-	RJMP _0x24
-_0x20:
 ; 0000 00AE     {
 ; 0000 00AF         Uc_Positive_5_under_count++;
-	INC  R4
 ; 0000 00B0         if(Uc_Positive_5_under_count > 10)
-	LDI  R30,LOW(10)
-	CP   R30,R4
-	BRSH _0x25
 ; 0000 00B1         {
 ; 0000 00B2             Uc_Positive_5_over_count = 0;
-	CLR  R5
 ; 0000 00B3             Uc_Positive_5_under_count = 11;
-	LDI  R30,LOW(11)
-	MOV  R4,R30
 ; 0000 00B4             /* clear warning */
 ; 0000 00B5             Uc_Positive_5_warning = 0;
-	CBI  0x13,1
 ; 0000 00B6         }
 ; 0000 00B7     }
-_0x25:
-_0x24:
 ; 0000 00B8 
 ; 0000 00B9     /* Kiem tra nguon -12VDC */
 ; 0000 00BA     Uint_adc_value = read_adc(ADC_Negative_12);
-	LDI  R26,LOW(4)
-	RCALL SUBOPT_0x0
 ; 0000 00BB     if(Uint_adc_value*ADC_Negative_12_ratio > ADC_Negative_12_Set_OVER)
-	BRLO _0x28
 ; 0000 00BC     {
 ; 0000 00BD         Uc_Negative_12_over_count++;
-	INC  R9
 ; 0000 00BE         if(Uc_Negative_12_over_count > 10)
-	LDI  R30,LOW(10)
-	CP   R30,R9
-	BRSH _0x29
 ; 0000 00BF         {
 ; 0000 00C0             Uc_Negative_12_over_count = 11;
-	LDI  R30,LOW(11)
-	MOV  R9,R30
 ; 0000 00C1             Uc_Negative_12_under_count = 0;
-	CLR  R8
 ; 0000 00C2             /* Set warning */
 ; 0000 00C3             Uc_Negative_12_warning = 1;
-	SBI  0x13,3
 ; 0000 00C4         }
 ; 0000 00C5     }
-_0x29:
 ; 0000 00C6     else
-	RJMP _0x2C
-_0x28:
 ; 0000 00C7     {
 ; 0000 00C8         Uc_Negative_12_under_count++;
-	INC  R8
 ; 0000 00C9         if(Uc_Negative_12_under_count > 10)
-	LDI  R30,LOW(10)
-	CP   R30,R8
-	BRSH _0x2D
 ; 0000 00CA         {
 ; 0000 00CB             Uc_Negative_12_over_count = 0;
-	CLR  R9
 ; 0000 00CC             Uc_Negative_12_under_count = 11;
-	LDI  R30,LOW(11)
-	MOV  R8,R30
 ; 0000 00CD             /* clear warning */
 ; 0000 00CE             Uc_Negative_12_warning = 0;
-	CBI  0x13,3
 ; 0000 00CF         }
 ; 0000 00D0     }
-_0x2D:
-_0x2C:
 ; 0000 00D1 
 ; 0000 00D2     /* Kiem tra nguon +12VDC */
 ; 0000 00D3     Uint_adc_value = read_adc(ADC_Positive_12);
-	LDI  R26,LOW(3)
-	RCALL SUBOPT_0x0
 ; 0000 00D4     if(Uint_adc_value*ADC_Positive_12_ratio > ADC_Positive_12_Set_OVER)
-	BRLO _0x30
 ; 0000 00D5     {
 ; 0000 00D6         Uc_Positive_12_over_count++;
-	INC  R7
 ; 0000 00D7         if(Uc_Positive_12_over_count > 10)
-	LDI  R30,LOW(10)
-	CP   R30,R7
-	BRSH _0x31
 ; 0000 00D8         {
 ; 0000 00D9             Uc_Positive_12_over_count = 11;
-	LDI  R30,LOW(11)
-	MOV  R7,R30
 ; 0000 00DA             Uc_Positive_12_under_count = 0;
-	CLR  R6
 ; 0000 00DB             /* Set warning */
 ; 0000 00DC             Uc_Positive_12_warning = 1;
-	SBI  0x13,2
 ; 0000 00DD         }
 ; 0000 00DE     }
-_0x31:
 ; 0000 00DF     else
-	RJMP _0x34
-_0x30:
 ; 0000 00E0     {
 ; 0000 00E1         Uc_Positive_12_under_count++;
-	INC  R6
 ; 0000 00E2         if(Uc_Positive_12_under_count > 10)
-	LDI  R30,LOW(10)
-	CP   R30,R6
-	BRSH _0x35
 ; 0000 00E3         {
 ; 0000 00E4             Uc_Positive_12_over_count = 0;
-	CLR  R7
 ; 0000 00E5             Uc_Positive_12_under_count = 11;
-	LDI  R30,LOW(11)
-	MOV  R6,R30
 ; 0000 00E6             /* clear warning */
 ; 0000 00E7             Uc_Positive_12_warning = 0;
-	CBI  0x13,2
 ; 0000 00E8         }
 ; 0000 00E9     }
-_0x35:
-_0x34:
 ; 0000 00EA 
 ; 0000 00EB     /* Kiem tra nguon +24VDC */
 ; 0000 00EC     Uint_adc_value = read_adc(ADC_Positive_24);
-	LDI  R26,LOW(2)
-	RCALL SUBOPT_0x0
 ; 0000 00ED     if(Uint_adc_value*ADC_Positive_24_ratio > ADC_Positive_24_Set_OVER)
-	BRLO _0x38
 ; 0000 00EE     {
 ; 0000 00EF         Uc_Positive_24_over_count++;
-	INC  R11
 ; 0000 00F0         if(Uc_Positive_24_over_count > 10)
-	LDI  R30,LOW(10)
-	CP   R30,R11
-	BRSH _0x39
 ; 0000 00F1         {
 ; 0000 00F2             Uc_Positive_24_over_count = 11;
-	LDI  R30,LOW(11)
-	MOV  R11,R30
 ; 0000 00F3             Uc_Positive_24_under_count = 0;
-	CLR  R10
 ; 0000 00F4             /* Set warning */
 ; 0000 00F5             Uc_Positive_24_warning = 1;
-	SBI  0x13,4
 ; 0000 00F6         }
 ; 0000 00F7     }
-_0x39:
 ; 0000 00F8     else
-	RJMP _0x3C
-_0x38:
 ; 0000 00F9     {
 ; 0000 00FA         Uc_Positive_24_under_count++;
-	INC  R10
 ; 0000 00FB         if(Uc_Positive_24_under_count > 10)
-	LDI  R30,LOW(10)
-	CP   R30,R10
-	BRSH _0x3D
 ; 0000 00FC         {
 ; 0000 00FD             Uc_Positive_24_over_count = 0;
-	CLR  R11
 ; 0000 00FE             Uc_Positive_24_under_count = 11;
-	LDI  R30,LOW(11)
-	MOV  R10,R30
 ; 0000 00FF             /* clear warning */
 ; 0000 0100             Uc_Positive_24_warning = 0;
-	CBI  0x13,4
 ; 0000 0101         }
 ; 0000 0102     }
-_0x3D:
-_0x3C:
 ; 0000 0103 
 ; 0000 0104     if(Uc_Negative_5_warning || Uc_Negative_12_warning || Uc_Positive_5_warning || Uc_Positive_12_warning)
-	SBIC 0x13,0
-	RJMP _0x41
-	SBIC 0x13,3
-	RJMP _0x41
-	SBIC 0x13,1
-	RJMP _0x41
-	SBIS 0x13,2
-	RJMP _0x40
-_0x41:
 ; 0000 0105     {
 ; 0000 0106         CONTROL_UNDER_24_OFF;
-	SBI  0x1B,7
 ; 0000 0107     }
 ; 0000 0108     else
-	RJMP _0x45
-_0x40:
 ; 0000 0109     {
 ; 0000 010A         CONTROL_UNDER_24_ON;
-	CBI  0x1B,7
 ; 0000 010B     }
-_0x45:
 ; 0000 010C 
 ; 0000 010D     if(Uc_Positive_24_warning)
-	SBIS 0x13,4
-	RJMP _0x48
 ; 0000 010E     {
 ; 0000 010F         CONTROL_24_OFF;
-	SBI  0x1B,6
 ; 0000 0110     }
 ; 0000 0111     else
-	RJMP _0x4B
-_0x48:
 ; 0000 0112     {
 ; 0000 0113         CONTROL_24_ON;
-	CBI  0x1B,6
 ; 0000 0114     }
-_0x4B:
 ; 0000 0115     delay_ms(10);
-	LDI  R26,LOW(10)
-	LDI  R27,0
-	RCALL _delay_ms
 ; 0000 0116 }
-	LD   R16,Y+
-	LD   R17,Y+
-	RET
-; .FEND
 ;
 ;void main(void)
 ; 0000 0119 {
@@ -1709,24 +1541,32 @@ _main:
 _0x4E:
 ; 0000 0180     {
 ; 0000 0181     // Place your code here
-; 0000 0182         Protect();
-	RCALL _Protect
-; 0000 0183 
-; 0000 0184     }
+; 0000 0182         //Protect();
+; 0000 0183         CONTROL_UNDER_24_OFF;
+	SBI  0x1B,7
+; 0000 0184         CONTROL_24_OFF;
+	SBI  0x1B,6
+; 0000 0185         delay_ms(5000);
+	LDI  R26,LOW(5000)
+	LDI  R27,HIGH(5000)
+	RCALL _delay_ms
+; 0000 0186         CONTROL_UNDER_24_ON;
+	CBI  0x1B,7
+; 0000 0187         CONTROL_24_ON;
+	CBI  0x1B,6
+; 0000 0188         delay_ms(5000);
+	LDI  R26,LOW(5000)
+	LDI  R27,HIGH(5000)
+	RCALL _delay_ms
+; 0000 0189 
+; 0000 018A     }
 	RJMP _0x4E
-; 0000 0185 }
-_0x51:
-	RJMP _0x51
+; 0000 018B }
+_0x59:
+	RJMP _0x59
 ; .FEND
 
 	.CSEG
-;OPTIMIZER ADDED SUBROUTINE, CALLED 5 TIMES, CODE SIZE REDUCTION:14 WORDS
-SUBOPT_0x0:
-	RCALL _read_adc
-	MOVW R16,R30
-	__CPWRN 16,17,11
-	RET
-
 
 	.CSEG
 _delay_ms:
@@ -1739,11 +1579,6 @@ __delay_ms0:
 	brne __delay_ms0
 __delay_ms1:
 	ret
-
-__SAVELOCR2:
-	ST   -Y,R17
-	ST   -Y,R16
-	RET
 
 ;END OF CODE MARKER
 __END_OF_CODE:

@@ -28,7 +28,5 @@ Uc_Positive_24_warning                                                          
 FLASH Allocation [words]
 Function                                                                          Address   Size
 ------------------------------------------------------------------------------------------------
-read_adc                                                                          0x00027     15
-Init                                                                              0x00036     23
-Protect                                                                           0x0004D    123
-main                                                                              0x000C8     46
+Init                                                                              0x00027     23
+main                                                                              0x0003E     55

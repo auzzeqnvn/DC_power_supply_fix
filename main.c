@@ -383,7 +383,13 @@ void main(void)
     while (1)
     {
     // Place your code here
-        Protect();
+        //Protect();
+        CONTROL_UNDER_24_OFF;
+        CONTROL_24_OFF;
+        delay_ms(5000);
+        CONTROL_UNDER_24_ON;
+        CONTROL_24_ON;
+        delay_ms(5000);
 
     }
 }
