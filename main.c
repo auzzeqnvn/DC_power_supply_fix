@@ -30,22 +30,12 @@ Data Stack size         : 32
 #define ADC_Positive_12 3
 #define ADC_Positive_24 2
 
+#define ADC_Negative_5_Set_OVER 450
+#define ADC_Positive_5_Set_OVER 450
+#define ADC_Negative_12_Set_OVER    450
+#define ADC_Positive_12_Set_OVER    450
+#define ADC_Positive_24_Set_OVER    460
 
-#define ADC_Negative_5_ratio    1
-#define ADC_Positive_5_ratio    1
-
-#define ADC_Negative_12_ratio   1
-#define ADC_Positive_12_ratio   1
-
-#define ADC_Positive_24_ratio   1
-
-#define ADC_Negative_5_Set_OVER 10
-#define ADC_Positive_5_Set_OVER 10
-
-#define ADC_Negative_12_Set_OVER    10
-#define ADC_Positive_12_Set_OVER    10
-
-#define ADC_Positive_24_Set_OVER    10
 
 #define CONTROL_UNDER_24    PORTA.7
 #define CONTROL_24  PORTA.6
@@ -54,11 +44,14 @@ Data Stack size         : 32
 #define CONTROL_UNDER_24_ON CONTROL_UNDER_24=0
 #define CONTROL_UNDER_24_OFF CONTROL_UNDER_24=1
 
-#define CONTROL_24_ON   CONTROL_24=0
-#define CONTROL_24_OFF  CONTROL_24=1
+#define CONTROL_24_ON   CONTROL_24=1
+#define CONTROL_24_OFF  CONTROL_24=0
 
 #define BUZZER_ON   BUZZER = 1
 #define BUZZER_OFF  BUZZER = 0
+
+#define TIME_BUZZER 40
+#define TIME_WARNING    500
 
 
 unsigned char  Uc_Negative_5_over_count;
@@ -75,6 +68,8 @@ unsigned char  Uc_Negative_12_under_count;
 
 unsigned char  Uc_Positive_24_over_count;
 unsigned char  Uc_Positive_24_under_count;
+
+unsigned int    Uint_Warning_timer = 400;
 
 
 bit  Uc_Negative_5_warning;
@@ -134,7 +129,7 @@ void    Protect(void)
 
     /* Kiem tra nguon -5vdc */
     Uint_adc_value = read_adc(ADC_Negative_5);
-    if(Uint_adc_value*ADC_Negative_5_ratio > ADC_Negative_5_Set_OVER)
+    if(Uint_adc_value > ADC_Negative_5_Set_OVER)
     {
         Uc_Negative_5_over_count++;
         if(Uc_Negative_5_over_count > 10)
@@ -159,7 +154,7 @@ void    Protect(void)
 
     /* Kiem tra nguon +5VDC */
     Uint_adc_value = read_adc(ADC_Positive_5);
-    if(Uint_adc_value*ADC_Positive_5_ratio > ADC_Positive_5_Set_OVER)
+    if(Uint_adc_value > ADC_Positive_5_Set_OVER)
     {
         Uc_Positive_5_over_count++;
         if(Uc_Positive_5_over_count > 10)
@@ -184,7 +179,7 @@ void    Protect(void)
 
     /* Kiem tra nguon -12VDC */
     Uint_adc_value = read_adc(ADC_Negative_12);
-    if(Uint_adc_value*ADC_Negative_12_ratio > ADC_Negative_12_Set_OVER)
+    if(Uint_adc_value > ADC_Negative_12_Set_OVER)
     {
         Uc_Negative_12_over_count++;
         if(Uc_Negative_12_over_count > 10)
@@ -209,7 +204,7 @@ void    Protect(void)
 
     /* Kiem tra nguon +12VDC */
     Uint_adc_value = read_adc(ADC_Positive_12);
-    if(Uint_adc_value*ADC_Positive_12_ratio > ADC_Positive_12_Set_OVER)
+    if(Uint_adc_value > ADC_Positive_12_Set_OVER)
     {
         Uc_Positive_12_over_count++;
         if(Uc_Positive_12_over_count > 10)
@@ -234,10 +229,11 @@ void    Protect(void)
 
     /* Kiem tra nguon +24VDC */
     Uint_adc_value = read_adc(ADC_Positive_24);
-    if(Uint_adc_value*ADC_Positive_24_ratio > ADC_Positive_24_Set_OVER)
+    //Uint_adc_value = 150;
+    if(Uint_adc_value > ADC_Positive_24_Set_OVER)
     {
         Uc_Positive_24_over_count++;
-        if(Uc_Positive_24_over_count > 10)
+        if(Uc_Positive_24_over_count > 5)
         {
             Uc_Positive_24_over_count = 11;
             Uc_Positive_24_under_count = 0;
@@ -248,7 +244,7 @@ void    Protect(void)
     else
     {
         Uc_Positive_24_under_count++;
-        if(Uc_Positive_24_under_count > 10)
+        if(Uc_Positive_24_under_count > 5)
         {
             Uc_Positive_24_over_count = 0;
             Uc_Positive_24_under_count = 11;
@@ -260,19 +256,37 @@ void    Protect(void)
     if(Uc_Negative_5_warning || Uc_Negative_12_warning || Uc_Positive_5_warning || Uc_Positive_12_warning)
     {
         CONTROL_UNDER_24_OFF;
+        Uint_Warning_timer = 0;
+        // BUZZER_ON;
     }
-    else
+    else  if(Uint_Warning_timer == TIME_WARNING)
     {
         CONTROL_UNDER_24_ON;
+        BUZZER_OFF;
     }
 
     if(Uc_Positive_24_warning)
     {
         CONTROL_24_OFF;
+        Uint_Warning_timer = 0;
+    }
+    else if(Uint_Warning_timer >= TIME_WARNING)
+    {
+        CONTROL_24_ON;
+    }
+
+
+    if(Uint_Warning_timer < TIME_WARNING) 
+    {
+        Uint_Warning_timer++;
+        if(Uint_Warning_timer%TIME_BUZZER == 0)
+        {
+            BUZZER = !BUZZER;
+        }
     }
     else
     {
-        CONTROL_24_ON;
+        BUZZER_OFF;
     }
     delay_ms(10);
 }
@@ -383,13 +397,6 @@ void main(void)
     while (1)
     {
     // Place your code here
-        //Protect();
-        CONTROL_UNDER_24_OFF;
-        CONTROL_24_OFF;
-        delay_ms(5000);
-        CONTROL_UNDER_24_ON;
-        CONTROL_24_ON;
-        delay_ms(5000);
-
+        Protect();
     }
 }

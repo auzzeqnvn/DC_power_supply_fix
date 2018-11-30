@@ -19,6 +19,7 @@ Uc_Negative_12_over_count                                                       
 Uc_Negative_12_under_count                                                        R8           1
 Uc_Positive_24_over_count                                                         R11          1
 Uc_Positive_24_under_count                                                        R10          1
+Uint_Warning_timer                                                                R12,R13      2
 Uc_Negative_5_warning                                                             GPIOR0.0  1bit
 Uc_Positive_5_warning                                                             GPIOR0.1  1bit
 Uc_Positive_12_warning                                                            GPIOR0.2  1bit
@@ -28,5 +29,7 @@ Uc_Positive_24_warning                                                          
 FLASH Allocation [words]
 Function                                                                          Address   Size
 ------------------------------------------------------------------------------------------------
-Init                                                                              0x00027     23
-main                                                                              0x0003E     55
+read_adc                                                                          0x0003E     15
+Init                                                                              0x0004D     23
+Protect                                                                           0x00064    157
+main                                                                              0x00101     46
