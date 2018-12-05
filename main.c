@@ -30,10 +30,10 @@ Data Stack size         : 32
 #define ADC_Positive_12 3
 #define ADC_Positive_24 2
 
-#define ADC_Negative_5_Set_OVER 450
-#define ADC_Positive_5_Set_OVER 450
-#define ADC_Negative_12_Set_OVER    450
-#define ADC_Positive_12_Set_OVER    450
+#define ADC_Negative_5_Set_OVER 446
+#define ADC_Positive_5_Set_OVER 448
+#define ADC_Negative_12_Set_OVER    448
+#define ADC_Positive_12_Set_OVER    446
 #define ADC_Positive_24_Set_OVER    460
 
 
@@ -255,9 +255,9 @@ void    Protect(void)
 
     if(Uc_Negative_5_warning || Uc_Negative_12_warning || Uc_Positive_5_warning || Uc_Positive_12_warning)
     {
+        delay_ms(1000);
         CONTROL_UNDER_24_OFF;
         Uint_Warning_timer = 0;
-        // BUZZER_ON;
     }
     else  if(Uint_Warning_timer == TIME_WARNING)
     {
@@ -267,6 +267,7 @@ void    Protect(void)
 
     if(Uc_Positive_24_warning)
     {
+        delay_ms(1000);
         CONTROL_24_OFF;
         Uint_Warning_timer = 0;
     }

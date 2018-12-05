@@ -50,10 +50,10 @@
 ;#define ADC_Positive_12 3
 ;#define ADC_Positive_24 2
 ;
-;#define ADC_Negative_5_Set_OVER 450
-;#define ADC_Positive_5_Set_OVER 450
-;#define ADC_Negative_12_Set_OVER    450
-;#define ADC_Positive_12_Set_OVER    450
+;#define ADC_Negative_5_Set_OVER 444
+;#define ADC_Positive_5_Set_OVER 448
+;#define ADC_Negative_12_Set_OVER    448
+;#define ADC_Positive_12_Set_OVER    446
 ;#define ADC_Positive_24_Set_OVER    460
 ;
 ;
@@ -498,283 +498,288 @@
 ;PCODE: $000000E4 VOL: 0
 ;PCODE: $000000E5 VOL: 0
 ; 0000 0101     {
-; 0000 0102         CONTROL_UNDER_24_OFF;
+; 0000 0102         delay_ms(1000);
 ;PCODE: $000000E6 VOL: 0
 ;PCODE: $000000E7 VOL: 0
-; 0000 0103         Uint_Warning_timer = 0;
+; 0000 0103         CONTROL_UNDER_24_OFF;
 ;PCODE: $000000E8 VOL: 0
-; 0000 0104         // BUZZER_ON;
+;PCODE: $000000E9 VOL: 0
+; 0000 0104         Uint_Warning_timer = 0;
+;PCODE: $000000EA VOL: 0
 ; 0000 0105     }
 ; 0000 0106     else  if(Uint_Warning_timer == TIME_WARNING)
-;PCODE: $000000E9 VOL: 0
-;PCODE: $000000EA VOL: 0
 ;PCODE: $000000EB VOL: 0
 ;PCODE: $000000EC VOL: 0
 ;PCODE: $000000ED VOL: 0
-; 0000 0107     {
-; 0000 0108         CONTROL_UNDER_24_ON;
 ;PCODE: $000000EE VOL: 0
 ;PCODE: $000000EF VOL: 0
-; 0000 0109         BUZZER_OFF;
+; 0000 0107     {
+; 0000 0108         CONTROL_UNDER_24_ON;
 ;PCODE: $000000F0 VOL: 0
 ;PCODE: $000000F1 VOL: 0
+; 0000 0109         BUZZER_OFF;
+;PCODE: $000000F2 VOL: 0
+;PCODE: $000000F3 VOL: 0
 ; 0000 010A     }
 ; 0000 010B 
 ; 0000 010C     if(Uc_Positive_24_warning)
-;PCODE: $000000F2 VOL: 0
-;PCODE: $000000F3 VOL: 0
 ;PCODE: $000000F4 VOL: 0
 ;PCODE: $000000F5 VOL: 0
 ;PCODE: $000000F6 VOL: 0
-; 0000 010D     {
-; 0000 010E         CONTROL_24_OFF;
 ;PCODE: $000000F7 VOL: 0
 ;PCODE: $000000F8 VOL: 0
-; 0000 010F         Uint_Warning_timer = 0;
+; 0000 010D     {
+; 0000 010E         delay_ms(1000);
 ;PCODE: $000000F9 VOL: 0
-; 0000 0110     }
-; 0000 0111     else if(Uint_Warning_timer >= TIME_WARNING)
 ;PCODE: $000000FA VOL: 0
+; 0000 010F         CONTROL_24_OFF;
 ;PCODE: $000000FB VOL: 0
 ;PCODE: $000000FC VOL: 0
+; 0000 0110         Uint_Warning_timer = 0;
 ;PCODE: $000000FD VOL: 0
+; 0000 0111     }
+; 0000 0112     else if(Uint_Warning_timer >= TIME_WARNING)
 ;PCODE: $000000FE VOL: 0
-; 0000 0112     {
-; 0000 0113         CONTROL_24_ON;
 ;PCODE: $000000FF VOL: 0
 ;PCODE: $00000100 VOL: 0
-; 0000 0114     }
-; 0000 0115 
-; 0000 0116 
-; 0000 0117     if(Uint_Warning_timer < TIME_WARNING)
 ;PCODE: $00000101 VOL: 0
 ;PCODE: $00000102 VOL: 0
+; 0000 0113     {
+; 0000 0114         CONTROL_24_ON;
 ;PCODE: $00000103 VOL: 0
 ;PCODE: $00000104 VOL: 0
+; 0000 0115     }
+; 0000 0116 
+; 0000 0117 
+; 0000 0118     if(Uint_Warning_timer < TIME_WARNING)
 ;PCODE: $00000105 VOL: 0
-; 0000 0118     {
-; 0000 0119         Uint_Warning_timer++;
 ;PCODE: $00000106 VOL: 0
 ;PCODE: $00000107 VOL: 0
 ;PCODE: $00000108 VOL: 0
-; 0000 011A         if(Uint_Warning_timer%TIME_BUZZER == 0)
 ;PCODE: $00000109 VOL: 0
+; 0000 0119     {
+; 0000 011A         Uint_Warning_timer++;
 ;PCODE: $0000010A VOL: 0
 ;PCODE: $0000010B VOL: 0
 ;PCODE: $0000010C VOL: 0
+; 0000 011B         if(Uint_Warning_timer%TIME_BUZZER == 0)
 ;PCODE: $0000010D VOL: 0
-; 0000 011B         {
-; 0000 011C             BUZZER = !BUZZER;
 ;PCODE: $0000010E VOL: 0
 ;PCODE: $0000010F VOL: 0
 ;PCODE: $00000110 VOL: 0
 ;PCODE: $00000111 VOL: 0
+; 0000 011C         {
+; 0000 011D             BUZZER = !BUZZER;
 ;PCODE: $00000112 VOL: 0
 ;PCODE: $00000113 VOL: 0
 ;PCODE: $00000114 VOL: 0
 ;PCODE: $00000115 VOL: 0
 ;PCODE: $00000116 VOL: 0
 ;PCODE: $00000117 VOL: 0
-; 0000 011D         }
-; 0000 011E     }
 ;PCODE: $00000118 VOL: 0
-; 0000 011F     else
 ;PCODE: $00000119 VOL: 0
 ;PCODE: $0000011A VOL: 0
-; 0000 0120     {
-; 0000 0121         BUZZER_OFF;
 ;PCODE: $0000011B VOL: 0
+; 0000 011E         }
+; 0000 011F     }
 ;PCODE: $0000011C VOL: 0
-; 0000 0122     }
+; 0000 0120     else
 ;PCODE: $0000011D VOL: 0
-; 0000 0123     delay_ms(10);
 ;PCODE: $0000011E VOL: 0
+; 0000 0121     {
+; 0000 0122         BUZZER_OFF;
 ;PCODE: $0000011F VOL: 0
 ;PCODE: $00000120 VOL: 0
-; 0000 0124 }
+; 0000 0123     }
 ;PCODE: $00000121 VOL: 0
+; 0000 0124     delay_ms(10);
 ;PCODE: $00000122 VOL: 0
 ;PCODE: $00000123 VOL: 0
-;
-;void main(void)
-; 0000 0127 {
 ;PCODE: $00000124 VOL: 0
-; 0000 0128     // Declare your local variables here
-; 0000 0129 
-; 0000 012A     // Crystal Oscillator division factor: 1
-; 0000 012B     #pragma optsize-
-; 0000 012C     CLKPR=(1<<CLKPCE);
+; 0000 0125 }
 ;PCODE: $00000125 VOL: 0
 ;PCODE: $00000126 VOL: 0
-; 0000 012D     CLKPR=(0<<CLKPCE) | (0<<CLKPS3) | (0<<CLKPS2) | (0<<CLKPS1) | (0<<CLKPS0);
 ;PCODE: $00000127 VOL: 0
+;
+;void main(void)
+; 0000 0128 {
 ;PCODE: $00000128 VOL: 0
-; 0000 012E     #ifdef _OPTIMIZE_SIZE_
-; 0000 012F     #pragma optsize+
-; 0000 0130     #endif
-; 0000 0131 
-; 0000 0132     // Input/Output Ports initialization
-; 0000 0133     // Port A initialization
-; 0000 0134     // Function: Bit7=Out Bit6=Out Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In
-; 0000 0135     DDRA=(1<<DDA7) | (1<<DDA6) | (0<<DDA5) | (0<<DDA4) | (0<<DDA3) | (0<<DDA2) | (0<<DDA1) | (0<<DDA0);
+; 0000 0129     // Declare your local variables here
+; 0000 012A 
+; 0000 012B     // Crystal Oscillator division factor: 1
+; 0000 012C     #pragma optsize-
+; 0000 012D     CLKPR=(1<<CLKPCE);
 ;PCODE: $00000129 VOL: 0
 ;PCODE: $0000012A VOL: 0
-; 0000 0136     // State: Bit7=0 Bit6=0 Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T
-; 0000 0137     PORTA=(0<<PORTA7) | (0<<PORTA6) | (0<<PORTA5) | (0<<PORTA4) | (0<<PORTA3) | (0<<PORTA2) | (0<<PORTA1) | (0<<PORTA0);
+; 0000 012E     CLKPR=(0<<CLKPCE) | (0<<CLKPS3) | (0<<CLKPS2) | (0<<CLKPS1) | (0<<CLKPS0);
 ;PCODE: $0000012B VOL: 0
 ;PCODE: $0000012C VOL: 0
-; 0000 0138 
-; 0000 0139     // Port B initialization
-; 0000 013A     // Function: Bit3=In Bit2=Out Bit1=In Bit0=In
-; 0000 013B     DDRB=(0<<DDB3) | (1<<DDB2) | (0<<DDB1) | (0<<DDB0);
+; 0000 012F     #ifdef _OPTIMIZE_SIZE_
+; 0000 0130     #pragma optsize+
+; 0000 0131     #endif
+; 0000 0132 
+; 0000 0133     // Input/Output Ports initialization
+; 0000 0134     // Port A initialization
+; 0000 0135     // Function: Bit7=Out Bit6=Out Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In
+; 0000 0136     DDRA=(1<<DDA7) | (1<<DDA6) | (0<<DDA5) | (0<<DDA4) | (0<<DDA3) | (0<<DDA2) | (0<<DDA1) | (0<<DDA0);
 ;PCODE: $0000012D VOL: 0
 ;PCODE: $0000012E VOL: 0
-; 0000 013C     // State: Bit3=T Bit2=0 Bit1=T Bit0=T
-; 0000 013D     PORTB=(0<<PORTB3) | (0<<PORTB2) | (0<<PORTB1) | (0<<PORTB0);
+; 0000 0137     // State: Bit7=0 Bit6=0 Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T
+; 0000 0138     PORTA=(0<<PORTA7) | (0<<PORTA6) | (0<<PORTA5) | (0<<PORTA4) | (0<<PORTA3) | (0<<PORTA2) | (0<<PORTA1) | (0<<PORTA0);
 ;PCODE: $0000012F VOL: 0
 ;PCODE: $00000130 VOL: 0
-; 0000 013E 
-; 0000 013F     // Timer/Counter 0 initialization
-; 0000 0140     // Clock source: System Clock
-; 0000 0141     // Clock value: Timer 0 Stopped
-; 0000 0142     // Mode: Normal top=0xFF
-; 0000 0143     // OC0A output: Disconnected
-; 0000 0144     // OC0B output: Disconnected
-; 0000 0145     TCCR0A=(0<<COM0A1) | (0<<COM0A0) | (0<<COM0B1) | (0<<COM0B0) | (0<<WGM01) | (0<<WGM00);
+; 0000 0139 
+; 0000 013A     // Port B initialization
+; 0000 013B     // Function: Bit3=In Bit2=Out Bit1=In Bit0=In
+; 0000 013C     DDRB=(0<<DDB3) | (1<<DDB2) | (0<<DDB1) | (0<<DDB0);
 ;PCODE: $00000131 VOL: 0
 ;PCODE: $00000132 VOL: 0
-; 0000 0146     TCCR0B=(0<<WGM02) | (0<<CS02) | (0<<CS01) | (0<<CS00);
+; 0000 013D     // State: Bit3=T Bit2=0 Bit1=T Bit0=T
+; 0000 013E     PORTB=(0<<PORTB3) | (0<<PORTB2) | (0<<PORTB1) | (0<<PORTB0);
 ;PCODE: $00000133 VOL: 0
 ;PCODE: $00000134 VOL: 0
-; 0000 0147     TCNT0=0x00;
+; 0000 013F 
+; 0000 0140     // Timer/Counter 0 initialization
+; 0000 0141     // Clock source: System Clock
+; 0000 0142     // Clock value: Timer 0 Stopped
+; 0000 0143     // Mode: Normal top=0xFF
+; 0000 0144     // OC0A output: Disconnected
+; 0000 0145     // OC0B output: Disconnected
+; 0000 0146     TCCR0A=(0<<COM0A1) | (0<<COM0A0) | (0<<COM0B1) | (0<<COM0B0) | (0<<WGM01) | (0<<WGM00);
 ;PCODE: $00000135 VOL: 0
 ;PCODE: $00000136 VOL: 0
-; 0000 0148     OCR0A=0x00;
+; 0000 0147     TCCR0B=(0<<WGM02) | (0<<CS02) | (0<<CS01) | (0<<CS00);
 ;PCODE: $00000137 VOL: 0
 ;PCODE: $00000138 VOL: 0
-; 0000 0149     OCR0B=0x00;
+; 0000 0148     TCNT0=0x00;
 ;PCODE: $00000139 VOL: 0
 ;PCODE: $0000013A VOL: 0
-; 0000 014A 
-; 0000 014B     // Timer/Counter 1 initialization
-; 0000 014C     // Clock source: System Clock
-; 0000 014D     // Clock value: Timer1 Stopped
-; 0000 014E     // Mode: Normal top=0xFFFF
-; 0000 014F     // OC1A output: Disconnected
-; 0000 0150     // OC1B output: Disconnected
-; 0000 0151     // Noise Canceler: Off
-; 0000 0152     // Input Capture on Falling Edge
-; 0000 0153     // Timer1 Overflow Interrupt: Off
-; 0000 0154     // Input Capture Interrupt: Off
-; 0000 0155     // Compare A Match Interrupt: Off
-; 0000 0156     // Compare B Match Interrupt: Off
-; 0000 0157     TCCR1A=(0<<COM1A1) | (0<<COM1A0) | (0<<COM1B1) | (0<<COM1B0) | (0<<WGM11) | (0<<WGM10);
+; 0000 0149     OCR0A=0x00;
 ;PCODE: $0000013B VOL: 0
 ;PCODE: $0000013C VOL: 0
-; 0000 0158     TCCR1B=(0<<ICNC1) | (0<<ICES1) | (0<<WGM13) | (0<<WGM12) | (0<<CS12) | (0<<CS11) | (0<<CS10);
+; 0000 014A     OCR0B=0x00;
 ;PCODE: $0000013D VOL: 0
 ;PCODE: $0000013E VOL: 0
-; 0000 0159     TCNT1H=0x00;
+; 0000 014B 
+; 0000 014C     // Timer/Counter 1 initialization
+; 0000 014D     // Clock source: System Clock
+; 0000 014E     // Clock value: Timer1 Stopped
+; 0000 014F     // Mode: Normal top=0xFFFF
+; 0000 0150     // OC1A output: Disconnected
+; 0000 0151     // OC1B output: Disconnected
+; 0000 0152     // Noise Canceler: Off
+; 0000 0153     // Input Capture on Falling Edge
+; 0000 0154     // Timer1 Overflow Interrupt: Off
+; 0000 0155     // Input Capture Interrupt: Off
+; 0000 0156     // Compare A Match Interrupt: Off
+; 0000 0157     // Compare B Match Interrupt: Off
+; 0000 0158     TCCR1A=(0<<COM1A1) | (0<<COM1A0) | (0<<COM1B1) | (0<<COM1B0) | (0<<WGM11) | (0<<WGM10);
 ;PCODE: $0000013F VOL: 0
 ;PCODE: $00000140 VOL: 0
-; 0000 015A     TCNT1L=0x00;
+; 0000 0159     TCCR1B=(0<<ICNC1) | (0<<ICES1) | (0<<WGM13) | (0<<WGM12) | (0<<CS12) | (0<<CS11) | (0<<CS10);
 ;PCODE: $00000141 VOL: 0
 ;PCODE: $00000142 VOL: 0
-; 0000 015B     ICR1H=0x00;
+; 0000 015A     TCNT1H=0x00;
 ;PCODE: $00000143 VOL: 0
 ;PCODE: $00000144 VOL: 0
-; 0000 015C     ICR1L=0x00;
+; 0000 015B     TCNT1L=0x00;
 ;PCODE: $00000145 VOL: 0
 ;PCODE: $00000146 VOL: 0
-; 0000 015D     OCR1AH=0x00;
+; 0000 015C     ICR1H=0x00;
 ;PCODE: $00000147 VOL: 0
 ;PCODE: $00000148 VOL: 0
-; 0000 015E     OCR1AL=0x00;
+; 0000 015D     ICR1L=0x00;
 ;PCODE: $00000149 VOL: 0
 ;PCODE: $0000014A VOL: 0
-; 0000 015F     OCR1BH=0x00;
+; 0000 015E     OCR1AH=0x00;
 ;PCODE: $0000014B VOL: 0
 ;PCODE: $0000014C VOL: 0
-; 0000 0160     OCR1BL=0x00;
+; 0000 015F     OCR1AL=0x00;
 ;PCODE: $0000014D VOL: 0
 ;PCODE: $0000014E VOL: 0
-; 0000 0161 
-; 0000 0162     // Timer/Counter 0 Interrupt(s) initialization
-; 0000 0163     TIMSK0=(0<<OCIE0B) | (0<<OCIE0A) | (0<<TOIE0);
+; 0000 0160     OCR1BH=0x00;
 ;PCODE: $0000014F VOL: 0
 ;PCODE: $00000150 VOL: 0
-; 0000 0164 
-; 0000 0165     // Timer/Counter 1 Interrupt(s) initialization
-; 0000 0166     TIMSK1=(0<<ICIE1) | (0<<OCIE1B) | (0<<OCIE1A) | (0<<TOIE1);
+; 0000 0161     OCR1BL=0x00;
 ;PCODE: $00000151 VOL: 0
 ;PCODE: $00000152 VOL: 0
-; 0000 0167 
-; 0000 0168     // External Interrupt(s) initialization
-; 0000 0169     // INT0: Off
-; 0000 016A     // Interrupt on any change on pins PCINT0-7: Off
-; 0000 016B     // Interrupt on any change on pins PCINT8-11: Off
-; 0000 016C     MCUCR=(0<<ISC01) | (0<<ISC00);
+; 0000 0162 
+; 0000 0163     // Timer/Counter 0 Interrupt(s) initialization
+; 0000 0164     TIMSK0=(0<<OCIE0B) | (0<<OCIE0A) | (0<<TOIE0);
 ;PCODE: $00000153 VOL: 0
 ;PCODE: $00000154 VOL: 0
-; 0000 016D     GIMSK=(0<<INT0) | (0<<PCIE1) | (0<<PCIE0);
+; 0000 0165 
+; 0000 0166     // Timer/Counter 1 Interrupt(s) initialization
+; 0000 0167     TIMSK1=(0<<ICIE1) | (0<<OCIE1B) | (0<<OCIE1A) | (0<<TOIE1);
 ;PCODE: $00000155 VOL: 0
 ;PCODE: $00000156 VOL: 0
-; 0000 016E 
-; 0000 016F     // USI initialization
-; 0000 0170     // Mode: Disabled
-; 0000 0171     // Clock source: Register & Counter=no clk.
-; 0000 0172     // USI Counter Overflow Interrupt: Off
-; 0000 0173     USICR=(0<<USISIE) | (0<<USIOIE) | (0<<USIWM1) | (0<<USIWM0) | (0<<USICS1) | (0<<USICS0) | (0<<USICLK) | (0<<USITC);
+; 0000 0168 
+; 0000 0169     // External Interrupt(s) initialization
+; 0000 016A     // INT0: Off
+; 0000 016B     // Interrupt on any change on pins PCINT0-7: Off
+; 0000 016C     // Interrupt on any change on pins PCINT8-11: Off
+; 0000 016D     MCUCR=(0<<ISC01) | (0<<ISC00);
 ;PCODE: $00000157 VOL: 0
 ;PCODE: $00000158 VOL: 0
-; 0000 0174 
-; 0000 0175     // Analog Comparator initialization
-; 0000 0176     // Analog Comparator: Off
-; 0000 0177     // The Analog Comparator's positive input is
-; 0000 0178     // connected to the AIN0 pin
-; 0000 0179     // The Analog Comparator's negative input is
-; 0000 017A     // connected to the AIN1 pin
-; 0000 017B     ACSR=(1<<ACD) | (0<<ACBG) | (0<<ACO) | (0<<ACI) | (0<<ACIE) | (0<<ACIC) | (0<<ACIS1) | (0<<ACIS0);
+; 0000 016E     GIMSK=(0<<INT0) | (0<<PCIE1) | (0<<PCIE0);
 ;PCODE: $00000159 VOL: 0
 ;PCODE: $0000015A VOL: 0
-; 0000 017C     // Digital input buffer on AIN0: On
-; 0000 017D     // Digital input buffer on AIN1: On
-; 0000 017E     DIDR0=(0<<ADC1D) | (0<<ADC2D);
+; 0000 016F 
+; 0000 0170     // USI initialization
+; 0000 0171     // Mode: Disabled
+; 0000 0172     // Clock source: Register & Counter=no clk.
+; 0000 0173     // USI Counter Overflow Interrupt: Off
+; 0000 0174     USICR=(0<<USISIE) | (0<<USIOIE) | (0<<USIWM1) | (0<<USIWM0) | (0<<USICS1) | (0<<USICS0) | (0<<USICLK) | (0<<USITC);
 ;PCODE: $0000015B VOL: 0
 ;PCODE: $0000015C VOL: 0
-; 0000 017F 
-; 0000 0180     // ADC initialization
-; 0000 0181     // ADC Clock frequency: 1000.000 kHz
-; 0000 0182     // ADC Voltage Reference: AVCC pin
-; 0000 0183     // ADC Bipolar Input Mode: Off
-; 0000 0184     // ADC Auto Trigger Source: ADC Stopped
-; 0000 0185     // Digital input buffers on ADC0: On, ADC1: On, ADC2: On, ADC3: On
-; 0000 0186     // ADC4: On, ADC5: On, ADC6: On, ADC7: On
-; 0000 0187     DIDR0=(0<<ADC7D) | (0<<ADC6D) | (0<<ADC5D) | (0<<ADC4D) | (0<<ADC3D) | (0<<ADC2D) | (0<<ADC1D) | (0<<ADC0D);
+; 0000 0175 
+; 0000 0176     // Analog Comparator initialization
+; 0000 0177     // Analog Comparator: Off
+; 0000 0178     // The Analog Comparator's positive input is
+; 0000 0179     // connected to the AIN0 pin
+; 0000 017A     // The Analog Comparator's negative input is
+; 0000 017B     // connected to the AIN1 pin
+; 0000 017C     ACSR=(1<<ACD) | (0<<ACBG) | (0<<ACO) | (0<<ACI) | (0<<ACIE) | (0<<ACIC) | (0<<ACIS1) | (0<<ACIS0);
 ;PCODE: $0000015D VOL: 0
 ;PCODE: $0000015E VOL: 0
-; 0000 0188     ADMUX=ADC_VREF_TYPE;
+; 0000 017D     // Digital input buffer on AIN0: On
+; 0000 017E     // Digital input buffer on AIN1: On
+; 0000 017F     DIDR0=(0<<ADC1D) | (0<<ADC2D);
 ;PCODE: $0000015F VOL: 0
 ;PCODE: $00000160 VOL: 0
-; 0000 0189     ADCSRA=(1<<ADEN) | (0<<ADSC) | (0<<ADATE) | (0<<ADIF) | (0<<ADIE) | (0<<ADPS2) | (1<<ADPS1) | (1<<ADPS0);
+; 0000 0180 
+; 0000 0181     // ADC initialization
+; 0000 0182     // ADC Clock frequency: 1000.000 kHz
+; 0000 0183     // ADC Voltage Reference: AVCC pin
+; 0000 0184     // ADC Bipolar Input Mode: Off
+; 0000 0185     // ADC Auto Trigger Source: ADC Stopped
+; 0000 0186     // Digital input buffers on ADC0: On, ADC1: On, ADC2: On, ADC3: On
+; 0000 0187     // ADC4: On, ADC5: On, ADC6: On, ADC7: On
+; 0000 0188     DIDR0=(0<<ADC7D) | (0<<ADC6D) | (0<<ADC5D) | (0<<ADC4D) | (0<<ADC3D) | (0<<ADC2D) | (0<<ADC1D) | (0<<ADC0D);
 ;PCODE: $00000161 VOL: 0
 ;PCODE: $00000162 VOL: 0
-; 0000 018A     ADCSRB=(0<<BIN) | (0<<ADLAR) | (0<<ADTS2) | (0<<ADTS1) | (0<<ADTS0);
+; 0000 0189     ADMUX=ADC_VREF_TYPE;
 ;PCODE: $00000163 VOL: 0
 ;PCODE: $00000164 VOL: 0
-; 0000 018B 
-; 0000 018C     Init();
+; 0000 018A     ADCSRA=(1<<ADEN) | (0<<ADSC) | (0<<ADATE) | (0<<ADIF) | (0<<ADIE) | (0<<ADPS2) | (1<<ADPS1) | (1<<ADPS0);
 ;PCODE: $00000165 VOL: 0
-; 0000 018D     while (1)
 ;PCODE: $00000166 VOL: 0
-; 0000 018E     {
-; 0000 018F     // Place your code here
-; 0000 0190         Protect();
+; 0000 018B     ADCSRB=(0<<BIN) | (0<<ADLAR) | (0<<ADTS2) | (0<<ADTS1) | (0<<ADTS0);
 ;PCODE: $00000167 VOL: 0
-; 0000 0191     }
 ;PCODE: $00000168 VOL: 0
+; 0000 018C 
+; 0000 018D     Init();
 ;PCODE: $00000169 VOL: 0
-; 0000 0192 }
+; 0000 018E     while (1)
 ;PCODE: $0000016A VOL: 0
+; 0000 018F     {
+; 0000 0190     // Place your code here
+; 0000 0191         Protect();
 ;PCODE: $0000016B VOL: 0
+; 0000 0192     }
 ;PCODE: $0000016C VOL: 0
+;PCODE: $0000016D VOL: 0
+; 0000 0193 }
+;PCODE: $0000016E VOL: 0
+;PCODE: $0000016F VOL: 0
+;PCODE: $00000170 VOL: 0
